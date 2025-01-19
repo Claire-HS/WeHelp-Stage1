@@ -7,6 +7,8 @@ function func(...data) {
             middle = name[1]; 
         } else if (name.length === 4) {
             middle = name[2]; 
+        }else if (name.length === 5) {
+            middle = name[2]; 
         }
 
         if (!(middle in middleDict)) {

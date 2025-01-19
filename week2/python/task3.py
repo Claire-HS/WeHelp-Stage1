@@ -8,6 +8,9 @@ def func(*data):
            middle = name[1]
         elif(len(name)==4):
             middle = name[2]
+        elif(len(name)==5):
+            middle = name[2]
+
         if(middle) not in middle_dict:
             middle_dict[middle] = {}
             middle_dict[middle]["num"] = 1
