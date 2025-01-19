@@ -1,38 +1,73 @@
 function findAndPrint(messages, currentStation) {
-    const station  = ["Songshan", "Nanjing Sanmin","Taipei","Nanjing Fuxing","Songjiang Nanjing","Zhongshan","Beimen","Ximen","Xiaonanmen","Chiang Kai-Shek Memorial Hall","Guting","Taipower Building","Gongguan","Wanlong","Jingmei","Dapinglin","Qizhang","Xiaobitan", "no use", "Xindian City Hall","Xindian"];
-    const curIndex = station.indexOf(currentStation);
-    
-    let minDistance = 999;
-    let closestUser = "xxx";
-    for (const [person, message] of Object.entries(messages)) {
+    const line1 = ["Songshan", "Nanjing Sanmin", "Taipei", "Nanjing Fuxing", "Songjiang Nanjing", 
+                   "Zhongshan", "Beimen", "Ximen", "Xiaonanmen", "Chiang Kai-Shek Memorial Hall", 
+                   "Guting", "Taipower Building", "Gongguan", "Wanlong", "Jingmei", "Dapinglin", "Qizhang"];
+    const line2 = ["Xiaobitan"];
+    const line3 = ["Xindian City Hall", "Xindian"];
+
+    let curline = [];
+    if (line1.includes(currentStation)) {
+        curline = line1;
+    } else if (line2.includes(currentStation)) {
+        curline = line2;
+    } else if (line3.includes(currentStation)) {
+        curline = line3;
+    }
+
+    let minDistance = 9999;
+    let user = "xxx";
+
+    for (let person in messages) {
+        const message = messages[person];
         const words = message.split(" ");
 
-        for (const word of words) {
-            if (station.includes(word)) {
-                const personIdx = station.indexOf(word);
-                const distance = Math.abs(personIdx - curIndex);
-                if (distance < minDistance) {
-                    minDistance = distance;
-                    closestUser = person;
-                }
-                break;
+        for (let mx of words) {
+            let personLine = [];
+            if (line1.includes(mx)) {
+                personLine = line1;
+            } else if (line2.includes(mx)) {
+                personLine = line2;
+            } else if (line3.includes(mx)) {
+                personLine = line3;
+            } else {
+                continue; 
+            }
+
+            let station = [];
+            if (curline.length > personLine.length) {
+                station = curline.concat(personLine);
+            } else if (curline.length < personLine.length) {
+                station = personLine.concat(curline);
+            } else {
+                station = [...curline];
+            }
+
+            const personIdx = station.indexOf(mx);
+            const curIndex = station.indexOf(currentStation);
+
+            if (Math.abs(personIdx - curIndex) < minDistance) {
+                minDistance = Math.abs(personIdx - curIndex);
+                user = person;
+                break; 
             }
         }
     }
-    console.log(closestUser);
+
+    console.log(user);
 }
 
-// Test cases
+// Sample messages
 const messages = {
     "Leslie": "I'm at home near Xiaobitan station.",
     "Bob": "I'm at Ximen MRT station.",
     "Mary": "I have a drink near Jingmei MRT station.",
     "Copper": "I just saw a concert at Taipei Arena.",
-    "Vivian": "I'm at Xindian station waiting for you."
+    "Vivian": "I'm at Xindian station waiting for you.",
 };
 
-findAndPrint(messages, "Wanlong");  // print Mary
-findAndPrint(messages, "Songshan");  // print Copper
-findAndPrint(messages, "Qizhang");  // print Leslie
-findAndPrint(messages, "Ximen");    // print Bob
-findAndPrint(messages, "Xindian City Hall");  // print Vivian
+// Test cases
+findAndPrint(messages, "Wanlong");  // Expected: Mary
+findAndPrint(messages, "Songshan"); // Expected: Copper
+findAndPrint(messages, "Qizhang");  // Expected: Leslie
+findAndPrint(messages, "Ximen");    // Expected: Bob
+findAndPrint(messages, "Xindian City Hall"); // Expected: Vivian
