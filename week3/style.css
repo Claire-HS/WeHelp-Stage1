@@ -152,6 +152,10 @@ html,body {
     position: relative;
 }
 
+.bottom-pic-2{
+    width: 50%;
+}
+
 .bottom-pic img{
     width: 100%;
     height: 100%;

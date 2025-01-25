@@ -20,9 +20,19 @@
       return n1;
     }
 
-    function getSection2Item(stitle, imageUrl){
+    function addBlock(){
+      let tmp = document.createElement("div");
+      tmp.style.width='20px'
+      tmp.style.display='block'
+      return tmp
+    }
+    function getSection2Item(stitle, imageUrl, isAdd2=true){
+      
       let n1 = document.createElement("div");
       n1.classList.add("bottom-pic");
+      if(isAdd2) {
+        n1.classList.add("bottom-pic-2");
+      }
       let n2 = document.createElement("img");
       n2.setAttribute("src", imageUrl);
       let n3 = document.createElement("div");
@@ -53,17 +63,33 @@
             const section1Dom = getSection1Item(stitle, imageUrl);
             document.getElementById("section1").appendChild(section1Dom);
           } else if (i == 3) {
-            const section2DomPart1 = getSection2Item(stitle, imageUrl);
+            const section2DomPart1 = getSection2Item(stitle, imageUrl, false);
             document.getElementById("section2Part1").appendChild(section2DomPart1);
+
+            //mobile
+            const section2Dom = getSection2Item(stitle, imageUrl);
+            document.getElementById("section2-RWD1").appendChild(section2Dom);
           } else if (i < 6) {
             const section2DomPart2 = getSection2Item(stitle, imageUrl);
             document.getElementById("section2Part2").appendChild(section2DomPart2);
+
+            //mobile
+            const section2Dom = getSection2Item(stitle, imageUrl);
+            document.getElementById("section2-RWD1").appendChild(section2Dom);
           } else if (i < 8) {
             const section2DomPart3 = getSection2Item(stitle, imageUrl);
             document.getElementById("section2Part3").appendChild(section2DomPart3);
+
+            //mobile
+            const section2Dom = getSection2Item(stitle, imageUrl);
+            document.getElementById("section2-RWD1").appendChild(section2Dom);
           } else if (i == 8) {
-            const section2DomPart4 = getSection2Item(stitle, imageUrl);
+            const section2DomPart4 = getSection2Item(stitle, imageUrl, false);
             document.getElementById("section2Part4").appendChild(section2DomPart4);
+
+            //mobile
+            const section2Dom = getSection2Item(stitle, imageUrl);
+            document.getElementById("section2-RWD1").appendChild(section2Dom);
           } else if (i < 11) {
             const section2DomPart5 = getSection2Item(stitle, imageUrl);
             document.getElementById("section2Part5").appendChild(section2DomPart5);
