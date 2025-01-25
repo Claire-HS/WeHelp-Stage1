@@ -44,8 +44,8 @@
       const spot_list = spot_data.data.results;
 
       // RWD設定
-      const screenWidth = window.screen.width;
-      const isMobile = screenWidth <= 1200;  
+      // const screenWidth = window.screen.width;
+      // const isMobile = screenWidth <= 1200;  
 
       // 使用資料
       for (let i = 0; i < 15; i++) {
@@ -53,19 +53,6 @@
         imageUrl = "https" + spot_list[i]["filelist"].split("https")[1];
 
         // 產生 dom
-        // if (isMobile) {
-          if (i < 3) {
-
-          } else if (i < 11) {
-            const section2Dom = getSection2Item(stitle, imageUrl);
-            document.getElementById("section2-RWD1").appendChild(section2Dom);
-          } else if (i < 13) {
-            const section2Dom = getSection2Item(stitle, imageUrl);
-            document.getElementById("section2-RWD2").appendChild(section2Dom);
-          } else {
-            break
-          }
-        // } else {
           if (i < 3) {
             const section1Dom = getSection1Item(stitle, imageUrl);
             document.getElementById("section1").appendChild(section1Dom);
@@ -84,15 +71,20 @@
           } else if (i < 11) {
             const section2DomPart5 = getSection2Item(stitle, imageUrl);
             document.getElementById("section2Part5").appendChild(section2DomPart5);
+
+            //mobile
+            const section2Dom = getSection2Item(stitle, imageUrl);
+            document.getElementById("section2-RWD1").appendChild(section2Dom);
           } else if (i < 13) {
             const section2DomPart6 = getSection2Item(stitle, imageUrl);
             document.getElementById("section2Part6").appendChild(section2DomPart6);
-          }else {
-            break
+
+            //mobile
+            const section2Dom = getSection2Item(stitle, imageUrl);
+            document.getElementById("section2-RWD2").appendChild(section2Dom);
           }
-        // }
+ 
       }
-      document.getElementById("section1-rwd").classList.add("addClass")
     }
     const fileUrl = "https://padax.github.io/taipei-day-trip-resources/taipei-attractions-assignment-1";
     getFile(fileUrl);
