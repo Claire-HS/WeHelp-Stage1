@@ -1,5 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
+  <script>
+    function getSection1Item(stitle, imageUrl){
+      let n1 = document.createElement("div");
+      n1.classList.add("box-top");
+      let n2 = document.createElement("div");
+      n2.classList.add("top-pic");
+      let n3 = document.createElement("img");
+      n3.setAttribute("src", imageUrl);
+
+      n2.appendChild(n3);
+
+      let n4 = document.createElement("div");
+      n4.classList.add("top-name");
+      n4.innerText = stitle;
+
+      n1.appendChild(n2);
+      n1.appendChild(n4);
+      return n1;
+    }
+
+    function getSection2Item(stitle, imageUrl){
+      let n1 = document.createElement("div");
+      n1.classList.add("bottom-pic");
+      let n2 = document.createElement("img");
+      n2.setAttribute("src", imageUrl);
+      let n3 = document.createElement("div");
+      n3.classList.add("text-box");
+      n3.innerText = stitle;
+      let n4 = document.createElement("i");
+      n4.classList.add("fa-solid", "fa-star");
+
+      n1.appendChild(n2);
+      n1.appendChild(n3);
+      n1.appendChild(n4);
+      return n1
+    }
+
+
+
+    async function getFile(fileUrl) {
+      const response = await fetch(fileUrl);
+      const spot_data = await response.json();
+      const spot_list = spot_data.data.results;
+      // console.log("spot_list=", spot_list);
+
+      // 使用資料
+      for (let i = 0; i < 15; i++) {
+        stitle = spot_list[i]["stitle"];
+        imageUrl = "https" + spot_list[i]["filelist"].split("https")[1];
+
+        // 產生 dom
+        if (i < 3) {
+          const section1Dom = getSection1Item(stitle, imageUrl);
+          document.getElementById("section1").appendChild(section1Dom);
+        } else if (i == 3) {
+          const section2DomPart1 = getSection2Item(stitle, imageUrl);
+          // console.log("section2DomType1=", section2DomType1);
+          document.getElementById("section2Part1").appendChild(section2DomPart1);
+       
+        } else if (i < 6) {
+          const section2DomPart2 = getSection2Item(stitle, imageUrl);
+          document.getElementById("section2Part2").appendChild(section2DomPart2);
+        } else if (i < 8) {
+          const section2DomPart3 = getSection2Item(stitle, imageUrl);
+          document.getElementById("section2Part3").appendChild(section2DomPart3);
+        } else if (i == 8) {
+          const section2DomPart4 = getSection2Item(stitle, imageUrl);
+          document.getElementById("section2Part4").appendChild(section2DomPart4);
+        } else if (i < 11) {
+          const section2DomPart5 = getSection2Item(stitle, imageUrl);
+          document.getElementById("section2Part5").appendChild(section2DomPart5);
+          // console.log("section2DomType1=", section2DomType1);
+        } else if (i < 13) {
+          const section2DomPart6 = getSection2Item(stitle, imageUrl);
+          document.getElementById("section2Part6").appendChild(section2DomPart6);
+        }else {
+                break
+            }
+      }
+    }
+    const fileUrl = "https://padax.github.io/taipei-day-trip-resources/taipei-attractions-assignment-1";
+    getFile(fileUrl);
+
+  </script>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -43,98 +127,33 @@
     <div class="main-title">Welcome to MyHome</div>
     <div class="main-content">
       <div class="content">
-        <div class="section1">
-          <div class="box-top">
-            <div class="top-pic">
-              <img src="pic.jpeg" alt="kirkjufellsfoss in iceland" />
-            </div>
-            <div class="top-name">Promotion 1</div>
-          </div>
-          <div class="box-top">
-            <div class="top-pic">
-              <img src="pic.jpeg" alt="kirkjufellsfoss in iceland" />
-            </div>
-            <div class="top-name">Promotion 2</div>
-          </div>
-          <div class="box-top">
-            <div class="top-pic">
-              <img src="pic.jpeg" alt="kirkjufellsfoss in iceland" />
-            </div>
-            <div class="top-name">Promotion 3</div>
-          </div>
+        <div class="section1" id="section1">
         </div>
         <div class="desktop-view">
           <div class="section2">
-            <div class="box-bottom">
-              <div class="bottom-pic">
-                <img src="pic.jpeg" alt="kirkjufellsfoss in iceland" />
-                <div class="text-box">Title 1</div>
-                <i class="fa-solid fa-star"></i>
+            <div class="box-bottom" id="section2Part1">
+              
+            </div>
+            <div class="box-bottom"> 
+              <div class="box-bottom-small" id="section2Part2">
               </div>
             </div>
             <div class="box-bottom">
-              <div class="box-bottom-small">
-                <div class="bottom-pic">
-                  <img src="pic.jpeg" alt="kirkjufellsfoss in iceland" />
-                  <div class="text-box">Title 2</div>
-                  <i class="fa-solid fa-star"></i>
-                </div>
-                <div class="bottom-pic">
-                  <img src="pic.jpeg" alt="kirkjufellsfoss in iceland" />
-                  <div class="text-box">Title 3</div>
-                  <i class="fa-solid fa-star"></i>
-                </div>
-              </div>
-            </div>
-            <div class="box-bottom">
-              <div class="box-bottom-small">
-                <div class="bottom-pic">
-                  <img src="pic.jpeg" alt="kirkjufellsfoss in iceland" />
-                  <div class="text-box">Title 4</div>
-                  <i class="fa-solid fa-star"></i>
-                </div>
-                <div class="bottom-pic">
-                  <img src="pic.jpeg" alt="kirkjufellsfoss in iceland" />
-                  <div class="text-box">Title 5</div>
-                  <i class="fa-solid fa-star"></i>
-                </div>
+              <div class="box-bottom-small" id="section2Part3">
               </div>
             </div>
           </div>
           <div class="section2">
+            <div class="box-bottom" id="section2Part4">
+              
+            </div>
             <div class="box-bottom">
-              <div class="bottom-pic">
-                <img src="pic.jpeg" alt="kirkjufellsfoss in iceland" />
-                <div class="text-box">Title 6</div>
-                <i class="fa-solid fa-star"></i>
+              <div class="box-bottom-small" id="section2Part5">
+                
               </div>
             </div>
             <div class="box-bottom">
-              <div class="box-bottom-small">
-                <div class="bottom-pic">
-                  <img src="pic.jpeg" alt="kirkjufellsfoss in iceland" />
-                  <div class="text-box">Title 7</div>
-                  <i class="fa-solid fa-star"></i>
-                </div>
-                <div class="bottom-pic">
-                  <img src="pic.jpeg" alt="kirkjufellsfoss in iceland" />
-                  <div class="text-box">Title 8</div>
-                  <i class="fa-solid fa-star"></i>
-                </div>
-              </div>
-            </div>
-            <div class="box-bottom">
-              <div class="box-bottom-small">
-                <div class="bottom-pic">
-                  <img src="pic.jpeg" alt="kirkjufellsfoss in iceland" />
-                  <div class="text-box">Title 9</div>
-                  <i class="fa-solid fa-star"></i>
-                </div>
-                <div class="bottom-pic">
-                  <img src="pic.jpeg" alt="kirkjufellsfoss in iceland" />
-                  <div class="text-box">Title 10</div>
-                  <i class="fa-solid fa-star"></i>
-                </div>
+              <div class="box-bottom-small" id="section2Part6">
               </div>
             </div>
           </div>
