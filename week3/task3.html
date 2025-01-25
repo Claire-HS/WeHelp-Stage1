@@ -43,10 +43,6 @@
       const spot_data = await response.json();
       const spot_list = spot_data.data.results;
 
-      // RWD設定
-      // const screenWidth = window.screen.width;
-      // const isMobile = screenWidth <= 1200;  
-
       // 使用資料
       for (let i = 0; i < 15; i++) {
         stitle = spot_list[i]["stitle"];
