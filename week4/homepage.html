@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomePage</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="title">歡迎光臨，請輸入{{ fields_1 }}{{ fields_2 }}</div>
+    <div class="content">
+        <div class="login-text">登入系統</div>
+        <div class="login-keyin">
+            <form id="signinForm">
+                <div class="user">
+                    <label for="user">{{ fields_1 }}</label>
+                    <input type="text" name="user" id="user">
+                </div>
+                <div class="pwd">
+                    <label for="pwd">{{ fields_2 }}</label>
+                    <input type="password" name="pwd" id="pwd">
+                </div>
+                <div class="terms">
+                    <label for="terms">{{ checkbox_1 }}</label>
+                    <input type="checkbox" name="terms" id="terms">
+                </div>
+                <div class="login-button" id="submit">登入</div>
+            </form>
+        </div>
+    </div>
+    <div class="content">
+        <div class="calculator-text">計算正整數的平方</div>
+        <div class="calculator-keyin">
+            <form>
+                <div class="square">
+                    <label for="num">正整數</label>
+                    <input type="text" name="num" id="num">
+                </div>
+                <div class="login-button" id="calculator">計算</div>
+            </form>
+        </div>
+
+    </div>
+</body>
+ <script>
+        function termsCheck() {
+            let termsCheckbox = document.getElementById("terms");
+            if (termsCheckbox.checked) {
+               return true
+            }
+            else{
+                return false
+            }
+        }
+
+        document.getElementById("submit").addEventListener("click", function(event) {
+            let isCheck = termsCheck()
+            if(isCheck){
+                const formData = new FormData(document.getElementById("signinForm"));
+                fetch("/signin", {
+                    method: "POST",
+                    body: formData,
+                })
+                .then(response => {
+                        window.location.href = response.url; 
+                })
+                .catch((error) => {
+                    console.error("錯誤訊息:", error);  
+                })
+            }else{
+                alert("Please check the checkbox first");
+            }
+        });
+
+        document.getElementById("calculator").addEventListener("click", function(event) {
+            let numInput = document.getElementById("num").value;
+            if (/^[1-9]\d*$/.test(numInput)) { // 檢查是否為正整數
+                fetch(`/square/${numInput}`,{
+                    method:"GET",
+                })
+                .then(response => {
+                    window.location.href = response.url; 
+                })
+                .catch(error => {
+                    console.error("錯誤訊息:", error);
+                })
+            }else{
+                alert("Please enter a positive number");
+            } 
+        })
+    </script>
+</html>

@@ -1,0 +1,97 @@
+html, body{
+    margin: 0;
+    padding: 0;
+}
+
+.title{
+    height: 100px;
+    font-size: 30px;
+    background-color: #094682;
+    color: whitesmoke;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 100px;
+}
+
+.content{
+    width: 500px;
+    margin: auto;
+    font-size: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.login-text,.calculator-text{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bolder;
+    margin: 0px 0px 10px;
+
+}
+
+.login-keyin,.calculator-keyin{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.user,.pwd,.terms,.square{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+
+.login-keyin label,
+.calculator-keyin label{
+    margin: 5px;
+}
+
+.login-keyin input[type="text"],
+.login-keyin input[type="password"],
+.login-keyin input[type="checkbox"],
+.calculator-keyin input[type="text"]{
+    padding: 5px;
+}
+
+.login-button{
+    width: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
+    background-color:#094682; 
+    color: whitesmoke; 
+    border: none;
+    margin: auto;
+    cursor: pointer; 
+    border-radius: 4px;
+}
+
+.signin-content,.error-content,.calculator-content{
+    width: 500px;
+    margin: auto;
+    font-size: 20px;
+}
+
+.signin-text,.error-text,.calculator-content{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.logout{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer; 
+    font-weight: bolder;
+}
+
