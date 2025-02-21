@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MemberPage</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}">
+</head>
+<body>
+    <div class="title">歡迎光臨，這是會員頁</div>
+    <div class="content">
+        <div class="member-info">
+            <div class="signin-text">{{member_name}}，歡迎登入系統</div>
+            <a href=http://127.0.0.1:8000/signout class="logout">登出系統</a>
+        </div>
+        <div class="message-function">
+            <div class="content-text">快來留言吧！</div>
+            <form id="message-form">
+                <div class="member-message">
+                    <label for="message-text">內容</label>
+                    <input type="text" maxlength=255 name="text" id="message-text">
+                </div>
+                <div class="button">
+                    <button type="submit" class="submit-button">送出</button>
+                </div>
+            </form>
+
+        </div>
+        <div class="message-record">
+            {% for msg in messages %}
+            <div class="records">
+                <p>{{ msg.name }}: {{ msg.content }}</p>
+                {% if msg.name == member_name %}
+                <button class="delete-btn" message-id="{{ msg.id }}" member-id="{{ msg.member_id }}" onclick="confirmDelete(event)">Ｘ</button>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+</body>
+
+<script>
+
+    // message字數限制 
+    let inputField = document.getElementById("message-text"); 
+    let charCount = document.createElement("span"); 
+    charCount.classList.add("char-count");
+    inputField.parentNode.appendChild(charCount);
+    inputField.addEventListener("input", function () {
+        charCount.textContent = `字數限制: ${inputField.value.length} / ${inputField.maxLength}`
+    });
+
+
+    document.getElementById("message-form").addEventListener("submit", function(event){
+        event.preventDefault();
+        if (inputField.value.trim() === ""){
+            alert("訊息內容不可為空白！");
+        }else{
+            let messageData = new FormData(document.getElementById("message-form"));
+            fetch("/createMessage", {
+                method: "POST",
+                body: messageData,
+            })
+            .then(response => {
+                if (!response.ok){
+                    throw new Error(`伺服器錯誤，狀態碼：${response.status}`);
+                }
+                return response;
+            })
+            .then(response => {
+                window.location.href = response.url;
+            })
+            .catch(error => {
+                console.error("錯誤訊息:", error.message);  
+                alert(error.message);
+            })
+        }
+    })
+
+    function confirmDelete(event){
+        let messageId = event.target.getAttribute("message-id");
+        let memberId = event.target.getAttribute("member-id");
+        if (confirm("是否確定刪除此留言?")){
+            deleteMessage(messageId, memberId);
+        }
+    }
+
+    function deleteMessage(messageId, memberId) {
+        // console.log({ "message_id": messageId });
+        fetch("/deleteMessage", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ "message_id": messageId, "member_id": memberId}),
+        })
+        .then(response => {
+            if (response.ok) {
+                window.location.href = response.url;
+            }else{
+                return response.json();
+            }
+        })
+        .then(data => {
+            if (data && data.message) {
+                alert(data.message);
+            }
+        })
+        .catch(error => {
+            console.error("錯誤:", error);
+            alert("刪除留言時發生錯誤");
+        });
+}
+
+
+
+
+
+
+
+</script>
+</html>
+
+

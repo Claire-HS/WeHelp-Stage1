@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ErrorPage</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}">
+</head>
+<body>
+    <div class="title">失敗頁面</div>
+    <div class="content">
+        <div class="error-text">{{message}}</div>
+        <a href=http://127.0.0.1:8000 class="back-home">返回首頁</a>
+    </div>
+
+</body>
+</html>
