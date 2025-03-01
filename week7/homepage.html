@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomePage</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}">
+</head>
+<body>
+    <div class="title">歡迎光臨，請註冊登入系統</div>
+    <div class="content">
+        <div class="signup">
+            <div class="content-text">註冊帳號</div>
+            <form id="signup-form">
+                <div class="user">
+                    <label for="signup-user">{{ fields_1 }}</label>
+                    <input type="text" name="user" id="signup-user">
+                </div>
+                <div class="username">
+                    <label for="signup-username">{{ fields_2 }}</label>
+                    <input type="text" name="username" id="signup-username">
+                </div>
+                <div class="pwd">
+                    <label for="signup-pwd">{{ fields_3 }}</label>
+                    <input type="password" name="pwd" id="signup-pwd">
+                </div>
+                <div class="button">
+                    <button type="submit" class="submit-button">註冊</button>
+                </div>
+            </form>
+        </div>
+        <div class="login">
+            <div class="content-text">登入系統</div>
+            <form id="login-form">
+                <div class="username">
+                    <label for="login-username">{{ fields_2 }}</label>
+                    <input type="text" name="username" id="login-username">
+                </div>
+                <div class="pwd">
+                    <label for="login-pwd">{{ fields_3 }}</label>
+                    <input type="password" name="pwd" id="login-pwd">
+                </div>
+                <div class="button">
+                    <button type="submit" class="submit-button">登入</button>
+                </div>                
+            </form>
+        </div>
+    </div>
+</body>
+<script>
+
+    function formCheck(){
+        let inputs = document.querySelectorAll("#signup-form input");
+        for (let input of inputs){
+            // console.log(`欄位名稱: ${input.name}, 值: '${input.value.trim()}'`);
+            if(input.value.trim() === ""){
+                return false
+            }
+        }
+        return true
+    }
+
+      function loginCheck(){
+        let inputs = document.querySelectorAll("#login-form input");
+        for (let input of inputs){
+            if(input.value.trim() === ""){
+                return false
+            }
+        }
+        return true
+    }
+
+
+    document.getElementById("signup-form").addEventListener("submit", function(event){
+        event.preventDefault();  
+        let isCheck = formCheck();
+        if (isCheck){
+            const formData = new FormData(document.getElementById("signup-form"));
+            // console.log(formCheck())
+            fetch("/signup", {
+                method: "POST",
+                body: formData,
+            })
+            .then(response => {
+                if (!response.ok){
+                    throw new Error(`伺服器錯誤，狀態碼：${response.status}`);
+                }
+                return response;
+            })
+            .then(response => {
+                window.location.href = response.url;
+            })
+            .catch(error => {
+                console.error("錯誤訊息:", error.message);  
+                alert(error.message);
+            })
+        }else{
+            alert("所有欄位都必須填寫！");
+        }
+    })
+
+    document.getElementById("login-form").addEventListener("submit", function(event){
+        event.preventDefault();
+        let isCheck = loginCheck();
+        if (isCheck){
+            const loginData = new FormData(document.getElementById("login-form"));
+            fetch("/signin",{
+                method: "POST",
+                body: loginData,
+            })
+            .then(response => {
+                if(!response.ok){
+                    throw new Error(`伺服器錯誤，狀態碼：${response.status}`);
+                }
+                return response;
+            })
+            .then (response => {
+                window.location.href = response.url;
+            })
+            .catch(error => {
+                console.error("錯誤訊息:", error.message);  
+                alert(error.message);
+            })
+        }else{
+            alert("所有欄位都必須填寫！");
+        }
+    })
+
+
+
+
+
+
+</script>
+</html>

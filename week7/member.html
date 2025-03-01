@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MemberPage</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}">
+</head>
+<body>
+    <div class="title">歡迎光臨，這是會員頁</div>
+    <div class="m-content">
+        <div class="member-info">
+            <div class="signin-text" id="loginInName">{{member_name}}，歡迎登入系統</div>
+            <a href=http://127.0.0.1:8000/signout class="logout">登出系統</a>
+        </div>
+        <div class="m-function">
+            <div class="member-function">
+                <div class="search">
+                    <div class="search-text">查詢會員姓名</div>
+                    <div class="search-input">
+                        <input type="text" maxlength=255 name="text" id="search-member">
+                        <button type="button" id="search-button">查詢</button>
+                    </div>
+                    <div class="result" id="search-result"></div>
+                </div>
+                <div class="rename">
+                    <div class="rename-text">更新我的姓名</div>
+                    <div class="rename-input">
+                        <input type="text" maxlength=255 name="text" id="rename-member">
+                        <button type="button" id="rename-button">更新</button>    
+                    </div>
+                    <div class="result" id="rename_result"></div>
+                </div>
+            </div>
+            <div class="message-function">
+                <div class="message-board">
+                    <div class="content-text">快來留言吧！</div>
+                    <form id="message-form">
+                        <div class="member-message">
+                            <label for="message-text">內容</label>
+                            <input type="text" maxlength=255 name="text" id="message-text">
+                        </div>
+                        <div class="button">
+                            <button type="submit" class="submit-button">送出</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="message-record">
+                    {% for msg in messages %}
+                    <div class="records">
+                        <p>{{ msg.name }}: {{ msg.content }}</p>
+                        {% if msg.name == member_name %}
+                        <button class="delete-btn" message-id="{{ msg.id }}" onclick="confirmDelete(event)">Ｘ</button>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</body>
+
+<script>
+
+    // message字數限制 
+    let inputField = document.getElementById("message-text"); 
+    let charCount = document.createElement("span"); 
+    charCount.classList.add("char-count");
+    inputField.parentNode.appendChild(charCount);
+    inputField.addEventListener("input", function () {
+        charCount.textContent = `字數限制: ${inputField.value.length} / ${inputField.maxLength}`
+    });
+
+
+    document.getElementById("message-form").addEventListener("submit", function(event){
+        event.preventDefault();
+        if (inputField.value.trim() === ""){
+            alert("訊息內容不可為空白！");
+        }else{
+            let messageData = new FormData(document.getElementById("message-form"));
+            fetch("/createMessage", {
+                method: "POST",
+                body: messageData,
+            })
+            .then(response => {
+                if (!response.ok){
+                    throw new Error(`伺服器錯誤，狀態碼：${response.status}`);
+                }
+                return response;
+            })
+            .then(response => {
+                window.location.href = response.url;
+            })
+            .catch(error => {
+                console.error("錯誤訊息:", error.message);  
+                alert(error.message);
+            })
+        }
+    })
+
+    function confirmDelete(event){
+        let messageId = event.target.getAttribute("message-id");
+        if (confirm("是否確定刪除此留言?")){
+            deleteMessage(messageId);
+        }
+    }
+
+    function deleteMessage(messageId) {
+        // console.log({ "message_id": messageId });
+        fetch("/deleteMessage", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ "message_id": messageId}),
+        })
+        .then(response => {
+            if (response.ok) {
+                window.location.href = response.url;
+            }else{
+                return response.json();
+            }
+        })
+        .then(data => {
+            if (data && data.message) {
+                alert(data.message);
+            }
+        })
+        .catch(error => {
+            console.error("錯誤:", error);
+            alert("刪除留言時發生錯誤");
+        }); 
+    }
+
+    document.getElementById("search-button").addEventListener("click", function(){
+        let username = document.getElementById("search-member").value;
+        fetch(`/api/member?username=${username}`)
+        .then(response => response.json())
+        .then(data => {
+            if(data.data){
+                let result = data.data;
+                let searchResult = document.getElementById("search-result");
+                let resultElement = document.createElement("p");
+                resultElement.textContent = `${result.name} (${result.username})`;
+                searchResult.innerHTML = ''; 
+                searchResult.appendChild(resultElement);
+            } else {
+                document.getElementById("search-result").textContent = "No Data";
+            }
+        })
+        .catch(error => {
+            console.error("錯誤:", error);
+            alert("查詢時發生錯誤");
+        });
+    })
+
+
+    document.getElementById("rename-button").addEventListener("click", function(){
+        let newname = document.getElementById("rename-member").value;
+        fetch("/api/member", {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ "name": newname}),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Data:', data);
+            if(data.ok){
+                let result = data.data;
+                let renameResult = document.getElementById("rename_result");
+                let resultElement = document.createElement("p");
+                resultElement.textContent = "Updated.";
+                renameResult.innerHTML = ''; 
+                renameResult.appendChild(resultElement);
+                let loginName = document.getElementById("loginInName");
+                loginName.innerHTML = newname+"，歡迎登入系統";
+            } else {
+                document.getElementById("rename_result").textContent = "Failed to Update.";
+            }
+        })
+        .catch(error => {
+            console.error("錯誤:", error);
+            alert("查詢時發生錯誤");
+        });
+    })
+
+
+
+
+
+
+
+
+</script>
+</html>
+
+
